@@ -14,11 +14,21 @@ public class FileRoute extends RouteBuilder {
     
     @Override
     public void configure() throws Exception {
-        from("file://"+path+"input")//?delete=true")
-        .log("Arquivo: ${header.CamelFileName} - Path: ${header.CamelFilePath}")
+        //from("file://"+path+"input")//?delete=true")
+        from("file://"+path+"input?move=${date:now:yyyyMMdd}/${file:name}")
+        .log("Arquivo: ${header.CamelFileName} - Path: ${header.CamelFilePath}")//?noop=true //impede de processar arquivos iguais | recursive=true //verifica subpastas
+        // ?excludeExt=png,txt não processa dados com extersão png
+        // ?timeInit=SECONDS&initialDelay=10 verifica se há algo na pasta 10 segundos depois | ?delay=1000&repeatCount=3
+        // ?filterFile=${file:size} < 423 filtra por tamanho do arquivo que pode ser processado
+        // ?recursive=true&delete=true com output?flatten=true   copia dados de subpastas na entrada e cola na raiz de output
+        // ?includeExt=txt só vai processar arquivos txt
         .log("${file:name}")
-        .bean("fileComponent")
-        .process(new FileProcessor())
+        .choice()
+            .when(simple("${header.CamelFileLength} < 422"))
+                .to("bean:fileComponent")
+            .otherwise()
+                .process(new FileProcessor())                
+        //.bean("fileComponent")
         .to("file://"+path+"output");
     }
     
