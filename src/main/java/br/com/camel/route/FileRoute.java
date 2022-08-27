@@ -14,6 +14,7 @@ public class FileRoute extends RouteBuilder {
     
     @Override
     public void configure() throws Exception {
+        /*
         //from("file://"+path+"input")//?delete=true")
         from("file://"+path+"input?move=${date:now:yyyyMMdd}/${file:name}")
         .log("Arquivo: ${header.CamelFileName} - Path: ${header.CamelFilePath}")//?noop=true //impede de processar arquivos iguais | recursive=true //verifica subpastas
@@ -30,6 +31,9 @@ public class FileRoute extends RouteBuilder {
                 .process(new FileProcessor())                
         //.bean("fileComponent")
         .to("file://"+path+"output");
+        */
+        from("file-watch:"+path)//?events=MODIFY pega apenas os eventos de modificação
+            .log("Evento: ${header.CamelFileEventType} Arquivo: ${header.CamelFileName}");
     }
     
 }
