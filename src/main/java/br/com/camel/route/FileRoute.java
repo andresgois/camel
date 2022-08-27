@@ -32,8 +32,16 @@ public class FileRoute extends RouteBuilder {
         //.bean("fileComponent")
         .to("file://"+path+"output");
         */
-        from("file-watch:"+path)//?events=MODIFY pega apenas os eventos de modificação
-            .log("Evento: ${header.CamelFileEventType} Arquivo: ${header.CamelFileName}");
+        // FILE WATCH
+        /*from("file-watch:"+path)//?events=MODIFY pega apenas os eventos de modificação
+            .log("Evento: ${header.CamelFileEventType} Arquivo: ${header.CamelFileName}");*/
+        
+        from("direct:log-file")
+            .log("Log: ${header.CamelFileName}")
+            .process(new DirectProcess());
+            
+        from("file://"+path+"input")
+            .to("direct:log-file");
     }
     
 }
@@ -53,4 +61,12 @@ class FileProcessor implements Processor {
         System.out.println("Processor: "+exchange.getIn().getBody());
     }
     
+}
+
+class DirectProcess implements Processor {
+    @Override
+    public void process(Exchange exchange) throws Exception {
+        File file = exchange.getIn().getBody(File.class);
+        System.out.println("Processor: "+file.getName());
+    }
 }
