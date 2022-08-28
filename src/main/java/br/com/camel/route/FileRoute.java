@@ -7,7 +7,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class FileRoute extends RouteBuilder {
 
     private String path = "C:\\Users\\andre\\eclipse-workspace\\camel\\files\\";

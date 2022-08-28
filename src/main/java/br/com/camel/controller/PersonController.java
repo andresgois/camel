@@ -8,11 +8,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.camel.model.Person;
 import br.com.camel.repository.PersonRepository;
 import lombok.var;
 
+@RestController
+@RequestMapping("people")
 public class PersonController {
     
     @Autowired
