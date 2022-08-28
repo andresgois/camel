@@ -1,5 +1,9 @@
 package br.com.camel.repository;
 
-public class PersonRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import br.com.camel.model.Person;
+
+public interface PersonRepository extends JpaRepository<Person, Long>{
     
 }
