@@ -36,12 +36,21 @@ public class FileRoute extends RouteBuilder {
         /*from("file-watch:"+path)//?events=MODIFY pega apenas os eventos de modificação
             .log("Evento: ${header.CamelFileEventType} Arquivo: ${header.CamelFileName}");*/
         
-        from("direct:log-file")
+        // DIRECT
+        /*from("direct:log-file")
             .log("Log: ${header.CamelFileName}")
             .process(new DirectProcess());
             
         from("file://"+path+"input")
-            .to("direct:log-file");
+            .to("direct:log-file");*/
+        
+        // TIMER
+        //yyyy-MM-dd HH:mm:ss  or   yyyy-MM-dd´T´HH:mm:ss
+        // period -> segundo para disparar
+        // repeatCount -> quantidade de disparos
+        // time -> data e hora para disparo
+        from("timer:my-timer?period=2000&repeatCount=2&time=2022-08-27 16:14:40")
+            .log("Hora: ${date:now:HH:mm:ss}");
     }
     
 }
