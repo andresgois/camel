@@ -1,6 +1,10 @@
 package br.com.camel;
 
+import java.util.Map;
+
 import org.apache.camel.builder.RouteBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -16,6 +20,8 @@ public class CamelApplication {
 	
 	@Component
 	class DebeziumPostgres extends RouteBuilder {
+	    
+	    private final Logger logger =  LoggerFactory.getLogger(DebeziumPostgres.class);
 
 	    private String offsetStorageFileName = "C:\\Users\\andre\\eclipse-workspace\\camel\\files\\file.txt";
 	    private String host = "localhost";
@@ -25,6 +31,7 @@ public class CamelApplication {
 	    
 	    @Override
 	    public void configure() throws Exception {
+	        logger.info("=========================="+DebeziumPostgres.class+"==========================");
 	        from("debezium-postgres:dbpost?offsetStorageFileName="+offsetStorageFileName
 	                +"&databaseHostname="+host
 	                +"&databaseUser="+username
@@ -39,7 +46,23 @@ public class CamelApplication {
 	        .log("Operação:         ${headers.CamelDebeziumOperation}")// tipo evento: c = create (or insert), u = update, d = delete, r = snapshot
 	        .log("Base:             ${headers.CamelDebeziumSourceMetadata[db]}")
 	        .log("Tabela:           ${headers.CamelDebeziumSourceMetadata[table]}")
-	        .log("Chave primária:   ${headers.CamelDebeziumKey}");
+	        .log("Chave primária:   ${headers.CamelDebeziumKey}")
+	        
+	        .process(exchange -> {
+//	           Struct body = exchange.getIn().getBody(Struct.class);
+//	           Schema schema = body.schema();
+//	           
+//	           log.info("Body: "+body);
+//	           log.info("Schema: "+schema);
+//	           log.info("Campo: "+schema.fields());
+//	           log.info("Campo nome: "+schema.field("name"));
+	            
+	           Map body = exchange.getIn().getBody(Map.class);
+	           log.info("==============================================================================");
+	           log.info("Body: "+body);
+	           log.info("==============================================================================");
+	        });
+	        logger.info("==============================================================================");
 	    }
 	}
 
