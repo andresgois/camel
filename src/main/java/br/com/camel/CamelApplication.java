@@ -16,19 +16,14 @@ public class CamelApplication {
 	@Component
 	public class DebeziumRoute extends RouteBuilder{
 	    
-	    //@Value("${my.offsetStorageFileName}")
 	    private String offsetStorageFileName = "C:\\Users\\andre\\eclipse-workspace\\camel\\files\\offset-file.dat";
 	    
-	    //@Value("${my.host}")
 	    private String host = "localhost";
 	    
-	    //@Value("${my.username}")
 	    private String username = "postgres";
 	    
-	    //@Value("${my.password}")
 	    private String password = "123456";
 	    
-	    //@Value("${my.db}")
 	    private String db = "postgres";
 	    
 
