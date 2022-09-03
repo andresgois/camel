@@ -13,34 +13,34 @@ public class CamelApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CamelApplication.class, args);
 	}
-}
+	
+	@Component
+	class DebeziumPostgres extends RouteBuilder {
 
-@Component
-class DebeziumPostgres extends RouteBuilder {
+	    private String offsetStorageFileName = "C:\\Users\\andre\\eclipse-workspace\\camel\\files\\file.txt";
+	    private String host = "localhost";
+	    private String username = "postgres";
+	    private String password = "123456";
+	    private String db = "postgres";
+	    
+	    @Override
+	    public void configure() throws Exception {
+	        from("debezium-postgres:dbpost?offsetStorageFileName="+offsetStorageFileName
+	                +"&databaseHostname="+host
+	                +"&databaseUser="+username
+	                +"&databasePort=5432"
+	                +"&databasePassword="+password
+	                +"&databaseServerName="+db
+	                +"&databaseDbname="+db
+	                +"&pluginName=pgoutput")//decoderbufs
+	        .log("EVENTO:           ${body}")
+	        .log("Schema:           ${headers.CamelDebeziumIdentifier}")
+	        .log("Source metadata:  ${headers.CamelDebeziumSourceMetadata}")
+	        .log("Operação:         ${headers.CamelDebeziumOperation}")// tipo evento: c = create (or insert), u = update, d = delete, r = snapshot
+	        .log("Base:             ${headers.CamelDebeziumSourceMetadata[db]}")
+	        .log("Tabela:           ${headers.CamelDebeziumSourceMetadata[table]}")
+	        .log("Chave primária:   ${headers.CamelDebeziumKey}");
+	    }
+	}
 
-    private String offsetStorageFileName = "C:\\Users\\andre\\eclipse-workspace\\camel\\files\\file.dat";
-    private String host = "localhost";
-    private String username = "postgres";
-    private String password = "123456";
-    private String db = "postgres";
-    
-    @Override
-    public void configure() throws Exception {
-        from("debezium-postgres:dbpost?offsetStorageFileName="+offsetStorageFileName
-                +"&databaseHostname="+host
-                +"&databaseUser="+username
-                +"databaseHistoryFileFilename="+offsetStorageFileName
-                +"&databasePort=5432"
-                +"&databasePassword="+password
-                +"&databaseServerName="+db
-                +"&databaseDbname="+db
-                +"&pluginName=pgoutput")//decoderbufs
-        .log("EVENTO:           ${body}");
-        /*.log("Schema:           ${headers.CamelDebeziumIdentifier}")
-        .log("Source metadata:  ${headers.CamelDebeziumSourceMetadata}")
-        .log("Operação:         ${headers.CamelDebeziumOperation}")// tipo evento: c = create (or insert), u = update, d = delete, r = snapshot
-        .log("Base:             ${headers.CamelDebeziumSourceMetadata[db]}")
-        .log("Tabeça:           ${headers.CamelDebeziumSourceMetadata[table]}")
-        .log("Chave primária:   ${headers.CamelDebeziumKey}");*/
-    }
 }
