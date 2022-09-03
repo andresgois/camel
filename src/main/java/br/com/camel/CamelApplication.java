@@ -1,10 +1,10 @@
 package br.com.camel;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
+
 
 @SpringBootApplication
 public class CamelApplication {
@@ -16,20 +16,21 @@ public class CamelApplication {
 	@Component
 	public class DebeziumRoute extends RouteBuilder{
 	    
-	    @Value("${my.offsetStorageFileName}")
-	    private String offsetStorageFileName;
+	    //@Value("${my.offsetStorageFileName}")
+	    private String offsetStorageFileName = "C:\\Users\\andre\\eclipse-workspace\\camel\\files\\offset-file.dat";
 	    
-	    @Value("${my.host}")
-	    private String host;
+	    //@Value("${my.host}")
+	    private String host = "localhost";
 	    
-	    @Value("${my.username}")
-	    private String username;
+	    //@Value("${my.username}")
+	    private String username = "postgres";
 	    
-	    @Value("${my.password}")
-	    private String password;
+	    //@Value("${my.password}")
+	    private String password = "123456";
 	    
-	    @Value("${my.db}")
-	    private String db;
+	    //@Value("${my.db}")
+	    private String db = "postgres";
+	    
 
 	    @Override
 	    public void configure() throws Exception {
